@@ -17,16 +17,15 @@ namespace LiveAgentAssetManagement.DAL.DataRepository
             }
             else
             {
-                if (provider.Trim().ToUpper() == "SQL")
+                if (provider.Trim().ToUpper() == "MYSQL")
                 {
-                    var factoryDataAccess = new FactoryDataAccess(Provider.Sql, connectionString);
+                    var factoryDataAccess = new FactoryDataAccess(Provider.MySql, connectionString);
                     dataAccess = factoryDataAccess.GetDataAccess();
                 }
                 else
                 {
-                    throw new System.Exception("Invalid data provider in App Setting");
+                    throw new System.Exception("Invalid provider in App Setting");
                 }
-
             }
         }
     }

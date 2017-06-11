@@ -1,4 +1,5 @@
-﻿using LiveAgentAssetManagement.DAL.DataRepository;
+﻿using System.Data;
+using LiveAgentAssetManagement.DAL;
 
 namespace LiveAgentAssetManagement.BLL
 {
@@ -8,6 +9,11 @@ namespace LiveAgentAssetManagement.BLL
         public AssetManagementService(IAssetManagementRepository repository)
         {
             this.repository = repository;
-        }   
+        }
+
+        public DataTable GetAssets()
+        {
+            return repository.GetAssets();
+        }
     }
 }

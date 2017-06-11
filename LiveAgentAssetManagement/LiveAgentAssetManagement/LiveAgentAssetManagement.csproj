@@ -222,6 +222,10 @@
       <Project>{a50bd338-ec22-4d7d-8a7c-42ebb8cac12f}</Project>
       <Name>LiveAgentAssetManagement.BLL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LiveAgentAssetManagement.DAL\LiveAgentAssetManagement.DAL.csproj">
+      <Project>{743CDE44-99B5-47E2-8EAE-7FDAF509FB86}</Project>
+      <Name>LiveAgentAssetManagement.DAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

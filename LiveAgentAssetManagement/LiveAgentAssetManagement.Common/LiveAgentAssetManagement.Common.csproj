@@ -40,13 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\StoredProcedures.cs" />
+    <Compile Include="Constants\Tables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LiveAgentAssetManagement.DAL\LiveAgentAssetManagement.DAL.csproj">
-      <Project>{743cde44-99b5-47e2-8eae-7fdaf509fb86}</Project>
-      <Name>LiveAgentAssetManagement.DAL</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

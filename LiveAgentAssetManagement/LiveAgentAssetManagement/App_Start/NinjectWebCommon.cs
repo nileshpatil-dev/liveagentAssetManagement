@@ -10,6 +10,9 @@ namespace LiveAgentAssetManagement.App_Start
 
     using Ninject;
     using Ninject.Web.Common;
+    using LiveAgentAssetManagement.DAL.DataRepository;
+    using LiveAgentAssetManagement.DAL;
+    using LiveAgentAssetManagement.BLL;
 
     public static class NinjectWebCommon 
     {
@@ -61,6 +64,10 @@ namespace LiveAgentAssetManagement.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-        }        
+            kernel.Bind<IRepository>().To<Repository>();
+            kernel.Bind<IAssetManagementRepository>().To<AssetManagementRepository>();
+            kernel.Bind<IAssetManagementService>().To<AssetManagementService>();
+
+        }
     }
 }
