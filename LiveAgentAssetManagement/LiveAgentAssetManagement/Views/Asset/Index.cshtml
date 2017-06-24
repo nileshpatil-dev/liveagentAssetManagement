@@ -1,0 +1,82 @@
+﻿@model IEnumerable<LiveAgentAssetManagement.Models.AssetModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetSrNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetDepartment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetCategory)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetBrand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetSupplier)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PurchasedDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetSrNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetDepartment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetCategory)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetBrand)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetSupplier)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PurchasedDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>
