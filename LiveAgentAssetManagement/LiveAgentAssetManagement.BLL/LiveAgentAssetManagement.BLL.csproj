@@ -49,6 +49,10 @@
       <Project>{743CDE44-99B5-47E2-8EAE-7FDAF509FB86}</Project>
       <Name>LiveAgentAssetManagement.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LiveAgentAssetManagement.Entity\LiveAgentAssetManagement.Entity.csproj">
+      <Project>{6B436BF6-77A3-4B6B-A8E3-C283635F159D}</Project>
+      <Name>LiveAgentAssetManagement.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -20,8 +20,7 @@ namespace LiveAgentAssetManagement.Controllers
         // GET: Asset
         public ActionResult Index()
         {
-            DataTable dt = assetManagementService.GetAssets();
-            return View();
+            return View(assetManagementService.GetAssets());
         }
 
         // GET: Asset/Details/5
