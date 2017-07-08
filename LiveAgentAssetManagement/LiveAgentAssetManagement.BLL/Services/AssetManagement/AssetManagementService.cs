@@ -46,25 +46,25 @@ namespace LiveAgentAssetManagement.BLL
             return null;
         }
 
-        public AssetModel GetAssetByAssetCode(string AssetCode)
+        public List<AssetModel> GetAssetByAssetCode(string AssetCode)
         {
             var dtAsset = repository.GetAssetByAssetCode(AssetCode);
-            if (dtAsset != null && dtAsset.Rows.Count > 1)
+            if (dtAsset != null && dtAsset.Rows.Count > 0)
             {
-                var drAsset = dtAsset.Rows[0];
-                return new AssetModel
-                {
-                    AssetId = Convert.ToInt32(drAsset["AssetId"]),
-                    AssetName = Convert.ToString(drAsset["AssetName"]),
-                    Supplier = Convert.ToString(drAsset["AssetSupplier"]),
-                    PurchasedDate = Convert.ToDateTime(drAsset["PurchasedDate"]),
-                    AssetSrNo = Convert.ToString(drAsset["AssetBarcode"]),
-                    DepartmentId = Convert.ToInt32(drAsset["DepartmentId"]),
-                    CategoryId = Convert.ToInt32(drAsset["CategoryId"]),
-                    BrandId = Convert.ToInt32(drAsset["BrandId"])
-                };
+                return (from drAsset in dtAsset.AsEnumerable()
+                            select new AssetModel
+                            {
+                                AssetId = Convert.ToInt32(drAsset["AssetId"]),
+                                AssetName = Convert.ToString(drAsset["AssetName"]),
+                                Supplier = Convert.ToString(drAsset["Supplier"]),
+                                PurchasedDate = Convert.ToDateTime(drAsset["PurchasedDate"]),
+                                AssetSrNo = Convert.ToString(drAsset["Barcode"]),
+                                DepartmentName = Convert.ToString(drAsset["DepartmentName"]),
+                                CategoryName = Convert.ToString(drAsset["CategoryName"]),
+                                BrandName = Convert.ToString(drAsset["BrandName"]),
+                            }).ToList();
             }
-            return null;
+            return new List<AssetModel>();
         }
 
         public AssetPageLoadData GetAssetPageLoadData()

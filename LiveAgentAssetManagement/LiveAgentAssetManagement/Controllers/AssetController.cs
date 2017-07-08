@@ -196,5 +196,10 @@ namespace LiveAgentAssetManagement.Controllers
                 return View();
             }
         }
+
+        [HttpGet]
+        public JsonResult SearchAsset(string AssetCode) {
+            return Json(assetManagementService.GetAssetByAssetCode(AssetCode), JsonRequestBehavior.AllowGet); ;
+        }
     }
 }

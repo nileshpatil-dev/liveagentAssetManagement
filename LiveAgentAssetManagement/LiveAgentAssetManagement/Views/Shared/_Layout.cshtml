@@ -67,7 +67,8 @@
                     <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#Knowledgebase;id=kb_defa"><span class="glyphicon glyphicon-briefcase"></span> Customer portal</a></li>
                     <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#Configuration;"><span class="glyphicon glyphicon-cog"></span> Configuration</a></li>
                     <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#TicketsSearch;"><span class="glyphicon glyphicon-search"></span> Search</a></li>
-
+                    <li>@Html.ActionLink("Asset Management", "Index", "Asset")</li>
+                    <li>@Html.ActionLink("Ticket Management", "Index", "TicketManagement")</li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
@@ -86,9 +87,8 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/datatable")
     @RenderSection("scripts", required: false)
 
-    
+
 </body>
 </html>

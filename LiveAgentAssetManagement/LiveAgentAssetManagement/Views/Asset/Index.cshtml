@@ -8,87 +8,89 @@
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
 </p>
-<!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
 
-<!-- jQuery -->
-<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.12.4.js"></script>
 
-<!-- DataTables -->
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js">
-</script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.js">
-</script>
 
 <div class="panel panel-default">
     <div class="panel-heading">Asset List</div>
     <div class="panel-body">
         <table class="table table-striped table-bordered" id="assets">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.AssetName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AssetSrNo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DepartmentName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CategoryName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BrandName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Supplier)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PurchasedDate)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AssetName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AssetSrNo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DepartmentName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CategoryName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BrandName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Supplier)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PurchasedDate)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AssetName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AssetSrNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DepartmentName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BrandName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Supplier)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PurchasedDate)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.AssetId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.AssetId })
-                </td>
-            </tr>
-            }
-
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssetName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssetSrNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DepartmentName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BrandName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Supplier)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PurchasedDate)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.AssetId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.AssetId })
+                        </td>
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
 </div>
 
 
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf8">
+        $(document).ready(function () {
+            $('#assets').DataTable({ processing: true, });
+        });
+    </script>
+}
 
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js">
-    $(document).ready(function () {
-        $('#assets').DataTable({ processing: true, });
-    });
-</script>
+

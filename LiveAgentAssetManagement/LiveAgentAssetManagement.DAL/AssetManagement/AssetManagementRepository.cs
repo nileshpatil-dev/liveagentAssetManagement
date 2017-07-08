@@ -60,7 +60,7 @@ namespace LiveAgentAssetManagement.DAL
             {
                 new DalParameter()
                 {
-                    ParameterName = "AssetCode",
+                    ParameterName = "Barcode",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = AssetCode,
                     ParameterType = DbType.String,

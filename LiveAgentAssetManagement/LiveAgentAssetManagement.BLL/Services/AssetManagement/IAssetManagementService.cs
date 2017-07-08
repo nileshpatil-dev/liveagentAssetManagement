@@ -18,6 +18,6 @@ namespace LiveAgentAssetManagement.BLL
 
         bool DeleteAsset(int AssetId);
 
-        AssetModel GetAssetByAssetCode(string AssetCode);
+        List<AssetModel> GetAssetByAssetCode(string AssetCode);
     }
 }
