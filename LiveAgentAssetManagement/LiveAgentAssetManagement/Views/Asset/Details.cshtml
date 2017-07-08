@@ -1,0 +1,83 @@
+﻿@model LiveAgentAssetManagement.Entity.AssetModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AssetModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AssetId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AssetId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AssetName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AssetName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AssetSrNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AssetSrNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BrandId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BrandId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Supplier)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Supplier)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PurchasedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PurchasedDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.AssetId }) |*@
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -6,6 +6,18 @@ namespace LiveAgentAssetManagement.BLL
 {
     public interface IAssetManagementService
     {
-        IEnumerable<AssetModel> GetAssets();
+        List<AssetModel> GetAssets();
+
+        AssetPageLoadData GetAssetPageLoadData();
+
+        AssetModel GetAsset(int AssetId);
+
+        string SaveAsset(AssetModel assetModel);
+
+        string UpdateAsset(AssetModel assetModel);
+
+        bool DeleteAsset(int AssetId);
+
+        AssetModel GetAssetByAssetCode(string AssetCode);
     }
 }

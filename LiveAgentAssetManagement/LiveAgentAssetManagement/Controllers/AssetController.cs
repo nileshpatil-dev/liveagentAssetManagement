@@ -1,9 +1,7 @@
 ﻿using LiveAgentAssetManagement.BLL;
+using LiveAgentAssetManagement.Entity;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace LiveAgentAssetManagement.Controllers
@@ -20,55 +18,142 @@ namespace LiveAgentAssetManagement.Controllers
         // GET: Asset
         public ActionResult Index()
         {
-            return View(assetManagementService.GetAssets());
+            var data = assetManagementService.GetAssets();
+            return View(data);
         }
 
         // GET: Asset/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            return View(assetManagementService.GetAsset(id));
         }
 
         // GET: Asset/Create
         public ActionResult Create()
         {
-            return View();
+            var data = assetManagementService.GetAssetPageLoadData();
+
+            var model = new AssetModel();
+            model.PurchasedDate = DateTime.Now;
+            model.DepartmentList = data.DepartmentList;
+            model.CategoryList = data.CategoryList;
+            model.BrandList = data.BrandList;
+
+
+            TempData["DepartmentList"] = data.DepartmentList;
+            TempData["CategoryList"] = data.CategoryList;
+            TempData["BrandList"] = data.BrandList;
+            return View(model);
         }
 
         // POST: Asset/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(AssetModel model)
         {
             try
             {
-                // TODO: Add insert logic here
 
-                return RedirectToAction("Index");
+                model.DepartmentList = TempData["DepartmentList"] as List<SelectListItem>;
+                model.CategoryList = TempData["CategoryList"] as List<SelectListItem>;
+                model.BrandList = TempData["BrandList"] as List<SelectListItem>;
+                TempData.Keep();
+                if (ModelState.IsValid)
+                {
+                    var message = assetManagementService.SaveAsset(model);
+                    if (string.IsNullOrWhiteSpace(message))
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        foreach (var error in message.Split('`'))
+                        {
+                            ModelState.AddModelError(string.Empty, error);
+                        }
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    return View(model);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(model);
             }
         }
 
         // GET: Asset/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var assetModel = assetManagementService.GetAsset(id);
+            if (assetModel == null)
+            {
+                ModelState.AddModelError(string.Empty, "Asset not found");
+                return View(new AssetModel());
+            }
+            else
+            {
+                var data = assetManagementService.GetAssetPageLoadData();
+
+                assetModel.DepartmentList = data.DepartmentList;
+                assetModel.CategoryList = data.CategoryList;
+                assetModel.BrandList = data.BrandList;
+
+                TempData["DepartmentList"] = data.DepartmentList;
+                TempData["CategoryList"] = data.CategoryList;
+                TempData["BrandList"] = data.BrandList;
+                return View(assetModel);
+            }
         }
 
         // POST: Asset/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
+
             try
             {
-                // TODO: Add update logic here
+                var model = new AssetModel();
+                model.AssetName = collection["AssetName"];
+                model.AssetSrNo = collection["AssetSrNo"];
+                model.DepartmentId = Convert.ToInt32(collection["DepartmentId"]);
+                model.CategoryId = Convert.ToInt32(collection["CategoryId"]);
+                model.BrandId = Convert.ToInt32(collection["BrandId"]);
+                model.Supplier = Convert.ToString(collection["Supplier"]);
+                model.PurchasedDate = Convert.ToDateTime(collection["PurchasedDate"]);
+                model.AssetId = id;
 
-                return RedirectToAction("Index");
+                model.DepartmentList = TempData["DepartmentList"] as List<SelectListItem>;
+                model.CategoryList = TempData["CategoryList"] as List<SelectListItem>;
+                model.BrandList = TempData["BrandList"] as List<SelectListItem>;
+                TempData.Keep();
+                if (ModelState.IsValid)
+                {
+                    var message = assetManagementService.UpdateAsset(model);
+                    if (string.IsNullOrWhiteSpace(message))
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        foreach (var error in message.Split('`'))
+                        {
+                            ModelState.AddModelError(string.Empty, error);
+                        }
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    return View(model);
+                }
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError(string.Empty, ex.Message);
                 return View();
             }
         }
@@ -76,7 +161,16 @@ namespace LiveAgentAssetManagement.Controllers
         // GET: Asset/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var assetModel = assetManagementService.GetAsset(id);
+            if (assetModel == null)
+            {
+                ModelState.AddModelError(string.Empty, "Asset not found");
+                return View();
+            }
+            else
+            {
+                return View(assetModel);
+            }
         }
 
         // POST: Asset/Delete/5
@@ -85,12 +179,20 @@ namespace LiveAgentAssetManagement.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                if (id == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Asset not found");
+                    return View();
+                }
+                else
+                {
+                    var isSuccess = assetManagementService.DeleteAsset(id);
+                    return RedirectToAction("Index");
+                }
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError(string.Empty, ex.Message);
                 return View();
             }
         }

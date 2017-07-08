@@ -1,38 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace LiveAgentAssetManagement.Entity
 {
     public class AssetModel
     {
+        public AssetModel()
+        {
+            DepartmentList = new List<SelectListItem>();
+            CategoryList = new List<SelectListItem>();
+            BrandList = new List<SelectListItem>();
+        }
+
         [Display(Name = "Id")]
         public int AssetId { get; set; }
 
-        [Required(ErrorMessage = "Asset should not be empty")]
+        [Display(Name = "Name")]
+        [Required(ErrorMessage = "Name should not be empty.")]
         public string AssetName { get; set; }
 
-        [Required(ErrorMessage = "Asset serial number not be empty")]
+        [Display(Name = "Sr No")]
+        [Required(ErrorMessage = "Serial number should not be empty.")]
         public string AssetSrNo { get; set; }
 
-        [Range(1, Int32.MaxValue, ErrorMessage = "Invalid asset department id")]
-        public int AssetDepartment { get; set; }
+        [Display(Name = "Department")]
+        public int DepartmentId { get; set; }
 
-        [Range(1, Int32.MaxValue, ErrorMessage = "Invalid asset category id")]
-        public int AssetCategory { get; set; }
 
-        [Range(1, Int32.MaxValue, ErrorMessage = "Invalid asset brand id")]
-        public int AssetBrand { get; set; }
+        [Display(Name = "Department")]
+        public string DepartmentName { get; set; }
+        
+        public List<SelectListItem> DepartmentList { get; set; }
 
-        public bool AssetStatus { get; set; }
+        [Display(Name = "Category")]
+        public int CategoryId { get; set; }
 
-        [Range(1, Int32.MaxValue, ErrorMessage = "Invalid asset supplier id")]
-        public int AssetSupplier { get; set; }
+        [Display(Name = "Category")]
+        public string CategoryName { get; set; }
 
-        [Required(ErrorMessage = "Invalid asset purchased date")]
+        public List<SelectListItem> CategoryList { get; set; }
+
+        [Display(Name = "Brand")]
+        public int BrandId { get; set; }
+
+        [Display(Name = "Brand")]
+        public string BrandName { get; set; }
+
+        public List<SelectListItem> BrandList { get; set; }
+
+        [Display(Name = "Supplier")]
+        [Required(ErrorMessage = "Supplier should not be empty.")]
+        public string Supplier { get; set; }
+
+        [Display(Name = "Purchased Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime PurchasedDate { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            List<ValidationResult> validationResultList = new List<ValidationResult>();
+            if (PurchasedDate < Convert.ToDateTime("01/01/2000") || PurchasedDate > DateTime.Now)
+            {
+                ValidationResult validationResult = new ValidationResult("Invalid Purchase Date.");
+                validationResultList.Add(validationResult);
+                return validationResultList;
+            }
+
+            return validationResultList;
+        }
+    }
+
+    public class AssetPageLoadData
+    {
+        public List<SelectListItem> DepartmentList { get; set; }
+        public List<SelectListItem> CategoryList { get; set; }
+        public List<SelectListItem> BrandList { get; set; }
     }
 }

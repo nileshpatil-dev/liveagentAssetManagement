@@ -9,34 +9,86 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <div class="logo">
+                    <img src="~/Images/image003.png" />
+                </div>
+
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Mr Warren Buffett</a></li>
+                @*<li class="dropdown ">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            Account
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">SETTINGS</li>
+                            <li class=""><a href="#">Other Link</a></li>
+                            <li class=""><a href="#">Other Link</a></li>
+                            <li class=""><a href="#">Other Link</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>*@
+            </ul>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
+    <div class="side-menu">
+
+        <nav class="navbar navbar-default" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <div class="brand-wrapper">
+                    <!-- Hamburger -->
+                    <button type="button" class="navbar-toggle">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+            </div>
+            <!-- Main Menu -->
+            <div class="side-menu-container">
+                <ul class="nav navbar-nav">
+
+                    <li class="active"><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#Home;"><span class="glyphicon glyphicon-th-large"></span> Dashboard</a></li>
+                    <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#Conversations;"><span class="glyphicon glyphicon-envelope"></span>Tickets</a></li>
+                    <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#Chat-Overview;"><span class="glyphicon glyphicon-comment"></span> Chats</a></li>
+                    <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#CallsMonitoring;"><span class="glyphicon glyphicon-earphone"></span> Calls</a></li>
+                    <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#Reports;"><span class="glyphicon glyphicon-stats"></span> Reports</a></li>
+                    <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#Knowledgebase;id=kb_defa"><span class="glyphicon glyphicon-briefcase"></span> Customer portal</a></li>
+                    <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#Configuration;"><span class="glyphicon glyphicon-cog"></span> Configuration</a></li>
+                    <li><a href="https://sinnoxkw.ladesk.com/agent/index.php?rnd=8#TicketsSearch;"><span class="glyphicon glyphicon-search"></span> Search</a></li>
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+
+    </div>
+    <div class="container-fluid">
+        <div class="side-body">
+            @RenderBody()
+
+        </div>
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Live Agent</p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/datatable")
     @RenderSection("scripts", required: false)
+
+    
 </body>
 </html>
