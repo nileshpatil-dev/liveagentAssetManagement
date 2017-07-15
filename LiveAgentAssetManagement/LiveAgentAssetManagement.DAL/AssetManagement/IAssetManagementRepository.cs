@@ -9,14 +9,14 @@ namespace LiveAgentAssetManagement.DAL
 
         DataSet GetAssetPageLoadData();
 
-        DataTable GetAsset(int AssetId);
+        DataTable GetAsset(int assetId);
 
         string SaveAsset(AssetModel assetModel);
 
         string UpdateAsset(AssetModel assetModel);
 
-        bool DeleteAsset(int AssetId);
+        bool DeleteAsset(int assetId);
 
-        DataTable GetAssetByAssetCode(string AssetCode);
+        DataTable GetAssetByAssetCode(string assetCode);
     }
 }

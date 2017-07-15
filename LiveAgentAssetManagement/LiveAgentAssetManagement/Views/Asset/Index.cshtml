@@ -73,7 +73,8 @@
                         </td>
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = item.AssetId }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.AssetId })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.AssetId }) |
+                            <span onclick='generateBarcode(this)' id="@item.AssetSrNo" title="Print Barcode" class="glyphicon glyphicon-barcode"></span>
                         </td>
                     </tr>
                 }
@@ -81,15 +82,49 @@
         </table>
     </div>
 </div>
-
+<div style="display: none" id="printDiv">
+    <img id="barcode" alt="" />
+</div>
 
 @section Scripts {
     <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+    <script src="../../Scripts/Barcode/JsBarcode.js"></script>
+    <script src="../../Scripts/Barcode/CODE128.js"></script>
     <script type="text/javascript" charset="utf8">
         $(document).ready(function () {
-            $('#assets').DataTable({ processing: true, });
+            $('#assets').DataTable({ processing: true });
         });
+
+        function generateBarcode(barcodeSpan) {
+            $("#barcode").JsBarcode(barcodeSpan.id, {
+                width: 2,
+                height: 100,
+                quite: 10,
+                format: "CODE128",
+                backgroundColor: "#fff",
+                lineColor: "#000",
+                displayValue: false
+            });
+            printDiv();
+        }
+
+        function printDiv() 
+        {
+
+            var divToPrint = document.getElementById('printDiv');
+
+            var newWin=window.open('','Print-Window');
+
+            newWin.document.open();
+
+            newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+            newWin.document.close();
+
+            setTimeout(function(){newWin.close();},10);
+
+        }
     </script>
 }
 

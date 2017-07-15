@@ -1,6 +1,5 @@
 ﻿using LiveAgentAssetManagement.Entity;
 using System.Collections.Generic;
-using System.Data;
 
 namespace LiveAgentAssetManagement.BLL
 {
@@ -10,14 +9,14 @@ namespace LiveAgentAssetManagement.BLL
 
         AssetPageLoadData GetAssetPageLoadData();
 
-        AssetModel GetAsset(int AssetId);
+        AssetModel GetAsset(int assetId);
 
         string SaveAsset(AssetModel assetModel);
 
         string UpdateAsset(AssetModel assetModel);
 
-        bool DeleteAsset(int AssetId);
+        bool DeleteAsset(int assetId);
 
-        List<AssetModel> GetAssetByAssetCode(string AssetCode);
+        List<AssetModel> GetAssetByAssetCode(string assetCode);
     }
 }

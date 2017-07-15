@@ -4,6 +4,6 @@ namespace LiveAgentAssetManagement.DAL.DataRepository
 {
     public interface IRepository
     {
-        IDataAccess dataAccess { get;}
+        IDataAccess DataAccess { get; }
     }
 }

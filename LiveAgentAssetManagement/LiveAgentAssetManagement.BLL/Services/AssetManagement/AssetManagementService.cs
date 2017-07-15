@@ -1,68 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Web.Mvc;
+using LiveAgentAssetManagement.Common.Constants;
 using LiveAgentAssetManagement.DAL;
 using LiveAgentAssetManagement.Entity;
-using System.Web.Mvc;
-using System.Linq;
-using LiveAgentAssetManagement.Common.Constants;
 
 namespace LiveAgentAssetManagement.BLL
 {
     public class AssetManagementService : IAssetManagementService
     {
         private readonly IAssetManagementRepository repository;
+
         public AssetManagementService(IAssetManagementRepository repository)
         {
             this.repository = repository;
         }
 
-        public bool DeleteAsset(int AssetId)
+        public bool DeleteAsset(int assetId)
         {
-            return repository.DeleteAsset(AssetId);
+            return repository.DeleteAsset(assetId);
         }
 
-        public AssetModel GetAsset(int AssetId)
+        public AssetModel GetAsset(int assetId)
         {
-            var dtAsset = repository.GetAsset(AssetId);
-            if (dtAsset != null && dtAsset.Rows.Count > 0)
+            var dtAsset = repository.GetAsset(assetId);
+
+            if (dtAsset == null || dtAsset.Rows.Count <= 0)
             {
-                var drAsset = dtAsset.Rows[0];
-                return new AssetModel
-                {
-                    AssetId = Convert.ToInt32(drAsset["AssetId"]),
-                    AssetName = Convert.ToString(drAsset["AssetName"]),
-                    Supplier = Convert.ToString(drAsset["Supplier"]),
-                    PurchasedDate = Convert.ToDateTime(drAsset["PurchasedDate"]),
-                    AssetSrNo = Convert.ToString(drAsset["Barcode"]),
-                    DepartmentId = Convert.ToInt32(drAsset["DepartmentId"]),
-                    DepartmentName = Convert.ToString(drAsset["DepartmentName"]),
-                    CategoryId = Convert.ToInt32(drAsset["CategoryId"]),
-                    CategoryName = Convert.ToString(drAsset["CategoryName"]),
-                    BrandId = Convert.ToInt32(drAsset["BrandId"]),
-                    BrandName = Convert.ToString(drAsset["BrandName"]),
-                };
+                return null;
             }
-            return null;
+
+            var drAsset = dtAsset.Rows[0];
+            return new AssetModel
+            {
+                AssetId = Convert.ToInt32(drAsset["AssetId"]),
+                AssetName = Convert.ToString(drAsset["AssetName"]),
+                Supplier = Convert.ToString(drAsset["Supplier"]),
+                PurchasedDate = Convert.ToDateTime(drAsset["PurchasedDate"]),
+                AssetSrNo = Convert.ToString(drAsset["Barcode"]),
+                DepartmentId = Convert.ToInt32(drAsset["DepartmentId"]),
+                DepartmentName = Convert.ToString(drAsset["DepartmentName"]),
+                CategoryId = Convert.ToInt32(drAsset["CategoryId"]),
+                CategoryName = Convert.ToString(drAsset["CategoryName"]),
+                BrandId = Convert.ToInt32(drAsset["BrandId"]),
+                BrandName = Convert.ToString(drAsset["BrandName"])
+            };
         }
 
-        public List<AssetModel> GetAssetByAssetCode(string AssetCode)
+        public List<AssetModel> GetAssetByAssetCode(string assetCode)
         {
-            var dtAsset = repository.GetAssetByAssetCode(AssetCode);
+            var dtAsset = repository.GetAssetByAssetCode(assetCode);
             if (dtAsset != null && dtAsset.Rows.Count > 0)
             {
                 return (from drAsset in dtAsset.AsEnumerable()
-                            select new AssetModel
-                            {
-                                AssetId = Convert.ToInt32(drAsset["AssetId"]),
-                                AssetName = Convert.ToString(drAsset["AssetName"]),
-                                Supplier = Convert.ToString(drAsset["Supplier"]),
-                                PurchasedDate = Convert.ToDateTime(drAsset["PurchasedDate"]),
-                                AssetSrNo = Convert.ToString(drAsset["Barcode"]),
-                                DepartmentName = Convert.ToString(drAsset["DepartmentName"]),
-                                CategoryName = Convert.ToString(drAsset["CategoryName"]),
-                                BrandName = Convert.ToString(drAsset["BrandName"]),
-                            }).ToList();
+                    select new AssetModel
+                    {
+                        AssetId = Convert.ToInt32(drAsset["AssetId"]),
+                        AssetName = Convert.ToString(drAsset["AssetName"]),
+                        Supplier = Convert.ToString(drAsset["Supplier"]),
+                        PurchasedDate = Convert.ToDateTime(drAsset["PurchasedDate"]),
+                        AssetSrNo = Convert.ToString(drAsset["Barcode"]),
+                        DepartmentName = Convert.ToString(drAsset["DepartmentName"]),
+                        CategoryName = Convert.ToString(drAsset["CategoryName"]),
+                        BrandName = Convert.ToString(drAsset["BrandName"])
+                    }).ToList();
             }
             return new List<AssetModel>();
         }
@@ -70,55 +73,61 @@ namespace LiveAgentAssetManagement.BLL
         public AssetPageLoadData GetAssetPageLoadData()
         {
             var dsAssetPageLoad = repository.GetAssetPageLoadData();
-            if (dsAssetPageLoad != null)
+            if (dsAssetPageLoad == null)
             {
-                var departmentList = (from drAsset in dsAssetPageLoad.Tables[Tables.Departments].AsEnumerable()
-                                      select new SelectListItem
-                                      {
-                                          Value = Convert.ToString(drAsset["Id"]),
-                                          Text = Convert.ToString(drAsset["Name"]),
-                                      }).ToList();
-
-                var categoryList = (from drAsset in dsAssetPageLoad.Tables[Tables.Categories].AsEnumerable()
-                                    select new SelectListItem
-                                    {
-                                        Value = Convert.ToString(drAsset["Id"]),
-                                        Text = Convert.ToString(drAsset["Name"]),
-                                    }).ToList();
-
-                var brandList = (from drAsset in dsAssetPageLoad.Tables[Tables.Brands].AsEnumerable()
-                                 select new SelectListItem
-                                 {
-                                     Value = Convert.ToString(drAsset["Id"]),
-                                     Text = Convert.ToString(drAsset["Name"]),
-                                 }).ToList();
-                return new AssetPageLoadData()
+                return new AssetPageLoadData
                 {
-                    DepartmentList = departmentList,
-                    CategoryList = categoryList,
-                    BrandList = brandList,
+                    DepartmentList = new List<SelectListItem>
+                    {
+                        new SelectListItem
+                        {
+                            Text = "-- Select Department --",
+                            Value = "0"
+                        }
+                    },
+                    BrandList = new List<SelectListItem>
+                    {
+                        new SelectListItem
+                        {
+                            Text = "-- Select Brand --",
+                            Value = "0"
+                        }
+                    },
+                    CategoryList = new List<SelectListItem>
+                    {
+                        new SelectListItem
+                        {
+                            Text = "-- Select Category --",
+                            Value = "0"
+                        }
+                    }
                 };
             }
-            return new AssetPageLoadData()
+            var departmentList = (from drAsset in dsAssetPageLoad.Tables[Tables.Departments].AsEnumerable()
+                select new SelectListItem
+                {
+                    Value = Convert.ToString(drAsset["Id"]),
+                    Text = Convert.ToString(drAsset["Name"])
+                }).ToList();
+
+            var categoryList = (from drAsset in dsAssetPageLoad.Tables[Tables.Categories].AsEnumerable()
+                select new SelectListItem
+                {
+                    Value = Convert.ToString(drAsset["Id"]),
+                    Text = Convert.ToString(drAsset["Name"])
+                }).ToList();
+
+            var brandList = (from drAsset in dsAssetPageLoad.Tables[Tables.Brands].AsEnumerable()
+                select new SelectListItem
+                {
+                    Value = Convert.ToString(drAsset["Id"]),
+                    Text = Convert.ToString(drAsset["Name"])
+                }).ToList();
+            return new AssetPageLoadData
             {
-                DepartmentList = new List<SelectListItem>() {
-                    new SelectListItem(){
-                        Text = "-- Select Department --",
-                        Value = "0"
-                    }
-                },
-                BrandList = new List<SelectListItem>() {
-                    new SelectListItem(){
-                        Text = "-- Select Brand --",
-                        Value = "0"
-                    }
-                },
-                CategoryList = new List<SelectListItem>() {
-                    new SelectListItem(){
-                        Text = "-- Select Category --",
-                        Value = "0"
-                    }
-                },
+                DepartmentList = departmentList,
+                CategoryList = categoryList,
+                BrandList = brandList
             };
         }
 
@@ -129,17 +138,17 @@ namespace LiveAgentAssetManagement.BLL
             if (dsAssets != null)
             {
                 list = (from drAsset in dsAssets.Tables[Tables.Assets].AsEnumerable()
-                        select new AssetModel
-                        {
-                            AssetId = Convert.ToInt32(drAsset["AssetId"]),
-                            AssetName = Convert.ToString(drAsset["AssetName"]),
-                            Supplier = Convert.ToString(drAsset["Supplier"]),
-                            PurchasedDate = Convert.ToDateTime(drAsset["PurchasedDate"]),
-                            AssetSrNo = Convert.ToString(drAsset["Barcode"]),
-                            DepartmentName = Convert.ToString(drAsset["DepartmentName"]),
-                            CategoryName = Convert.ToString(drAsset["CategoryName"]),
-                            BrandName = Convert.ToString(drAsset["BrandName"]),
-                        }).ToList();
+                    select new AssetModel
+                    {
+                        AssetId = Convert.ToInt32(drAsset["AssetId"]),
+                        AssetName = Convert.ToString(drAsset["AssetName"]),
+                        Supplier = Convert.ToString(drAsset["Supplier"]),
+                        PurchasedDate = Convert.ToDateTime(drAsset["PurchasedDate"]),
+                        AssetSrNo = Convert.ToString(drAsset["Barcode"]),
+                        DepartmentName = Convert.ToString(drAsset["DepartmentName"]),
+                        CategoryName = Convert.ToString(drAsset["CategoryName"]),
+                        BrandName = Convert.ToString(drAsset["BrandName"])
+                    }).ToList();
             }
             return list;
         }

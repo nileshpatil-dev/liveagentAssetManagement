@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Data;
-using DataAccess;
-using LiveAgentAssetManagement.DAL.DataRepository;
-using LiveAgentAssetManagement.Common.Constants;
-using LiveAgentAssetManagement.Entity;
 using System.Linq;
+using DataAccess;
+using LiveAgentAssetManagement.Common.Constants;
+using LiveAgentAssetManagement.DAL.DataRepository;
+using LiveAgentAssetManagement.Entity;
 
 namespace LiveAgentAssetManagement.DAL
 {
     public class AssetManagementRepository : IAssetManagementRepository
     {
         private readonly IDataAccess dataAccess;
+
         public AssetManagementRepository(IRepository repository)
         {
-            dataAccess = repository.dataAccess;
+            dataAccess = repository.DataAccess;
         }
 
-        public bool DeleteAsset(int AssetId)
+        public bool DeleteAsset(int assetId)
         {
             const string spName = StoredProcedures.DeleteAsset;
 
-            var paramList = new DalParameterList()
+            var paramList = new DalParameterList
             {
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "AssetId",
                     ParameterDirection = ParameterDirection.Input,
-                    ParameterValue = AssetId,
+                    ParameterValue = assetId,
                     ParameterType = DbType.Int32
                 }
             };
@@ -38,35 +39,33 @@ namespace LiveAgentAssetManagement.DAL
         {
             const string spName = StoredProcedures.GetAsset;
 
-            var paramList = new DalParameterList()
+            var paramList = new DalParameterList
             {
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "AssetId",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetId,
                     ParameterType = DbType.Int32
                 }
-
             };
             return dataAccess.GetDataTable(spName, CommandType.StoredProcedure, paramList);
         }
 
-        public DataTable GetAssetByAssetCode(string AssetCode)
+        public DataTable GetAssetByAssetCode(string assetCode)
         {
             const string spName = StoredProcedures.GetAssetByBarcode;
 
-            var paramList = new DalParameterList()
+            var paramList = new DalParameterList
             {
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "Barcode",
                     ParameterDirection = ParameterDirection.Input,
-                    ParameterValue = AssetCode,
+                    ParameterValue = assetCode,
                     ParameterType = DbType.String,
-                    ParameterSize = 500
+                    ParameterSize = 100
                 }
-
             };
             return dataAccess.GetDataTable(spName, CommandType.StoredProcedure, paramList);
         }
@@ -74,14 +73,14 @@ namespace LiveAgentAssetManagement.DAL
         public DataSet GetAssetPageLoadData()
         {
             const string spName = StoredProcedures.GetAssetPageLoadData;
-            string[] tableNames = { Tables.Departments, Tables.Categories, Tables.Brands };
+            string[] tableNames = {Tables.Departments, Tables.Categories, Tables.Brands};
             return dataAccess.GetDataSet(spName, CommandType.StoredProcedure, tableNames);
         }
 
         public DataSet GetAssets()
         {
             const string spName = StoredProcedures.GetAssets;
-            string[] tableNames = { Tables.Assets };
+            string[] tableNames = {Tables.Assets};
             return dataAccess.GetDataSet(spName, CommandType.StoredProcedure, tableNames);
         }
 
@@ -89,10 +88,9 @@ namespace LiveAgentAssetManagement.DAL
         {
             const string spName = StoredProcedures.SaveAsset;
 
-            var paramList = new DalParameterList()
+            var paramList = new DalParameterList
             {
-
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "AssetName",
                     ParameterDirection = ParameterDirection.Input,
@@ -100,37 +98,37 @@ namespace LiveAgentAssetManagement.DAL
                     ParameterType = DbType.String,
                     ParameterSize = 500
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "Barcode",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.AssetSrNo,
                     ParameterType = DbType.String,
-                    ParameterSize = 500
+                    ParameterSize = 100
                 },
 
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "DepartmentId",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.DepartmentId,
                     ParameterType = DbType.Int32
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "CategoryId",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.CategoryId,
                     ParameterType = DbType.Int32
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "BrandId",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.BrandId,
                     ParameterType = DbType.Int32
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "Supplier",
                     ParameterDirection = ParameterDirection.Input,
@@ -138,14 +136,14 @@ namespace LiveAgentAssetManagement.DAL
                     ParameterType = DbType.String,
                     ParameterSize = 500
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "PurchasedDate",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.PurchasedDate,
                     ParameterType = DbType.DateTime
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "Output",
                     ParameterDirection = ParameterDirection.Output,
@@ -165,17 +163,16 @@ namespace LiveAgentAssetManagement.DAL
         {
             const string spName = StoredProcedures.UpdateAsset;
 
-            var paramList = new DalParameterList()
+            var paramList = new DalParameterList
             {
-
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "AssetId",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.AssetId,
                     ParameterType = DbType.Int32
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "AssetName",
                     ParameterDirection = ParameterDirection.Input,
@@ -183,37 +180,37 @@ namespace LiveAgentAssetManagement.DAL
                     ParameterType = DbType.String,
                     ParameterSize = 500
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "Barcode",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.AssetSrNo,
                     ParameterType = DbType.String,
-                    ParameterSize = 500
+                    ParameterSize = 100
                 },
 
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "DepartmentId",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.DepartmentId,
                     ParameterType = DbType.Int32
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "CategoryId",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.CategoryId,
                     ParameterType = DbType.Int32
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "BrandId",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.BrandId,
                     ParameterType = DbType.Int32
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "Supplier",
                     ParameterDirection = ParameterDirection.Input,
@@ -221,14 +218,14 @@ namespace LiveAgentAssetManagement.DAL
                     ParameterType = DbType.String,
                     ParameterSize = 500
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "PurchasedDate",
                     ParameterDirection = ParameterDirection.Input,
                     ParameterValue = assetModel.PurchasedDate,
                     ParameterType = DbType.DateTime
                 },
-                new DalParameter()
+                new DalParameter
                 {
                     ParameterName = "Output",
                     ParameterDirection = ParameterDirection.Output,
@@ -242,5 +239,3 @@ namespace LiveAgentAssetManagement.DAL
         }
     }
 }
-
-

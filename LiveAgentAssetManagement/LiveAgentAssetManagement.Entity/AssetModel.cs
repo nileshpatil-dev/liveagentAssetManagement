@@ -61,14 +61,11 @@ namespace LiveAgentAssetManagement.Entity
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            List<ValidationResult> validationResultList = new List<ValidationResult>();
-            if (PurchasedDate < Convert.ToDateTime("01/01/2000") || PurchasedDate > DateTime.Now)
-            {
-                ValidationResult validationResult = new ValidationResult("Invalid Purchase Date.");
-                validationResultList.Add(validationResult);
+            var validationResultList = new List<ValidationResult>();
+            if (PurchasedDate >= Convert.ToDateTime("01/01/2000") && PurchasedDate <= DateTime.Now)
                 return validationResultList;
-            }
-
+            var validationResult = new ValidationResult("Invalid Purchase Date.");
+            validationResultList.Add(validationResult);
             return validationResultList;
         }
     }

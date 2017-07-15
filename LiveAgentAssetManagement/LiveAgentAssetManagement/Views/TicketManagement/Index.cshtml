@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -24,47 +23,48 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Ticket Info</h4>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="subject">Subject:</label>
-                    <label id="subject" style="color: red"></label>
-                </div>
-                <div class="form-group">
-                    <label for="assetSrNo">Asset Sr No:</label>
-                    <div id="bloodhound">
-                        <input "form-control" id="txtAssetSearch" autocomplete="off" type="text" placeholder="Search Asset">
+            <form id="updateTicketForm" action="https://sinnoxkw.ladesk.com/api/conversations/090845c2/fields" method="POST" enctype='application/json'>
+                <input type="hidden" id="ticketCustomField" name='customfields' value='[{"code":"AssetID","value":"99999"}]'>
+                <input type="hidden" name='apikey' value='42f95581f7bfa0656b85b24950232bb5'>
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <input type="hidden" id="ticketId" value="" />
+                        <label for="subject">Subject:</label>
+                        <label id="subject" style="color: red"></label>
+                    </div>
+                    <div class="form-group">
+                        <label>Asset Sr No:</label>
+                        <div id="bloodhound">
+                            <input class="form-control" id="txtAssetSearch" autocomplete="off" type="text" placeholder="Search Asset">
+                        </div>
+                    </div>
+                    <div>
+                        <table id="assetInfo" class="table">
+                            <thead style="background-color: #3179a2; color: white;">
+                                <tr>
+                                    <th>Asset Name</th>
+                                    <th>Brand</th>
+                                    <th>Category</th>
+                                    <th>Department</th>
+                                    <th>Supplier</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
-                <div>
-                    <table id="assetInfo" class="table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Asset Name</th>
-                                <th>Barcode</th>
-                                <th>Brand</th>
-                                <th>Categoryr</th>
-                                <th>Department</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>mdo</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="modal-footer">
+                    <button type="submit" value="" id="btnSave" class="btn btn-default">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" value="" id="btnSave" class="btn btn-default">Submit</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+
+
 @section Scripts {
     <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
@@ -76,36 +76,77 @@
             $('#txtAssetSearch').typeahead({
                 hint: true,
                 highlight: true,
-                minLength: 1
-                , source: function (request, response) {
+                minLength: 1,
+                source: function (request, response) {
                     $.ajax({
-                        url: 'https://dev.dragapp.com/v1.18/DragFeatures',
-                        //data: "{ 'prefix': '" + request + "'}",
+                        url: '../Asset/SearchAsset',
+                        data: {
+                            AssetCode: request
+                        },
                         dataType: "json",
                         type: "GET",
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
-                            items = [];
-                            map = {};
-                            $.each(data, function (i, item) {
-                                var id = item.Description;
-                                var name = item.FeatureCode;
-                                map[name] = { id: id, name: name };
-                                items.push(name);
-                            });
+                            var items = [];
+                            var map = {};
+                            $.each(data,
+                                function (i, item) {
+                                    var id = item.AssetId;
+                                    var name = item.AssetSrNo;
+                                    map[name] = { id: id, name: name };
+                                    items.push(name);
+                                });
                             response(items);
                             $(".dropdown-menu").css("height", "auto");
                         },
-                        error: function (response) {
-                            alert(response.responseText);
+                        error: function (err) {
+                            alert(err.responseText);
                         },
-                        failure: function (response) {
-                            alert(response.responseText);
+                        failure: function (err) {
+                            alert(err.responseText);
                         }
                     });
                 },
                 updater: function (item) {
-                    console.log(item);
+                    $('#assetInfo tbody').empty();
+                    $.ajax({
+                        url: '../Asset/SearchAsset',
+                        data: {
+                            AssetCode: item
+                        },
+                        dataType: "json",
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            $.each(data,
+                                function (i, aitem) {
+                                    var row = '<tr>';
+                                    row += '<td>' + aitem.AssetName + '</td>';
+                                    row += '<td>' + aitem.BrandName + '</td>';
+                                    row += '<td>' + aitem.CategoryName + '</td>';
+                                    row += '<td>' + aitem.DepartmentName + '</td>';
+                                    row += '<td>' + aitem.Supplier + '</td>';
+                                    row += '</tr>';
+
+                                    $('#assetInfo tbody').append(row);
+
+                                    // updating vallues to submit form
+                                    var ticketId = $(".modal-content #ticketId").val();
+                                    $('#updateTicketForm')
+                                        .attr('action',
+                                        'https://sinnoxkw.ladesk.com/api/conversations/' + ticketId + '/fields');
+
+                                    $("#ticketCustomField").val('[{"code":"AssetID","value":"' + aitem.AssetId + '"},{"code":"AssetName","value":"' + aitem.AssetName + '"},{"code":"AssetSupplier","value":"' + aitem.Supplier + '"},{"code":"AssetDepartment","value":"' + aitem.DepartmentName + '"}]');
+
+                                });
+                        },
+                        error: function (response) {
+                            console.log(response.responseText);
+                        },
+                        failure: function (response) {
+                            console.log(response.responseText);
+                        }
+                    });
                     // $('[id*=hfCustomerId]').val(map[item].id);
                     return item;
                 }
@@ -113,44 +154,63 @@
         });
 
 
+        $(document).on("click",
+            ".open-Model",
+            function () {
+                var subject = $(this).data('subject');
+                var id = $(this).data('id');
 
-
-        $(document).on("click", ".open-Model", function () {
-            var subject = $(this).data('subject');
-            $(".modal-content #subject")[0].innerHTML = subject
-        });
-
-        $(document).on("click", "#btnSave", function () {
-            console.log("result");
-            var postData = { customfields: [{ "code": "AssetID", "value": "asdf" }] };
-            $.post("https://sinnoxkw.ladesk.com/api/conversations/090845c2/fields?apikey=42f95581f7bfa0656b85b24950232bb5", postData, function (result) {
-                console.log(result);
+                $(".modal-content #subject")[0].innerHTML = subject;
+                $(".modal-content #ticketId").val(id);
             });
-            // $.ajax({
-            //     url: "https://sinnoxkw.ladesk.com/api/conversations/090845c2/fields",
-            //     method: "POST",
-            //     data: postData,
-            //     headers: {
-            //         'Access-Control-Allow-Origin': '*'
-            //     },
-            //     success: function (result) {
-            //         console.log(result);
-            //     }
-            // });
-        });
+
+        //$(document).on("click",
+        //    "#btnSave",
+        //    function () {
+        //        if ($("#assetInfo tbody tr").length === 0) {
+        //            alert("Serach Asset to assign to the ticket");
+        //        } else {
+        //            alert($(".modal-content #ticketId").val());
+        //            $("#myModal").modal('hide');
+        //            var postData = { customfields: [{ "code": "AssetID", "value": "asdf" }] };
+
+        //            //$.post(
+        //            //    "https://sinnoxkw.ladesk.com/api/conversations/090845c2/fields?apikey=42f95581f7bfa0656b85b24950232bb5",
+        //            //    postData,
+        //            //    function (result) {
+        //            //        console.log(result);
+        //            //    });
+        //            //$.ajax({
+        //            //    url: "https://sinnoxkw.ladesk.com/api/conversations/090845c2/fields?apikey=42f95581f7bfa0656b85b24950232bb5",
+        //            //    method: "POST",
+        //            //    contentType: "application/json",
+        //            //    data: postData,
+        //            //    success: function (result) {
+        //            //        console.log(result);
+        //            //    }
+        //            //});
+        //        }
+        //    });
 
         $(document).ready(function () {
             $.ajax({
-                url: "https://sinnoxkw.ladesk.com/api/v3/tickets?_page=1&_perPage=5000&_sortDir=ASC&apikey=42f95581f7bfa0656b85b24950232bb5",
+                url:
+                "https://sinnoxkw.ladesk.com/api/v3/tickets?_page=1&_perPage=5000&_sortDir=ASC&apikey=42f95581f7bfa0656b85b24950232bb5",
                 method: "GET",
                 success: function (result) {
+
+                    var filterdResult = result.filter(function (ticket) {
+                        return ticket.status === 'N';
+                    });
+
                     $("#data-table").DataTable({
                         order: [[1, "desc"]],
                         oLanguage: {
-                            sProcessing: '<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>'
+                            sProcessing:
+                            '<button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>'
                         },
                         processing: true,
-                        data: result,
+                        data: filterdResult,
                         columns: [
                             { data: 'subject' },
                             { data: 'date_created' }
@@ -159,7 +219,17 @@
                             {
                                 "targets": 0,
                                 "render": function (data, type, row) {
-                                    return '<a data-toggle="modal" data-id="' + row.id + '" data-subject="' + row.subject + '" id="edit"' + row.id + '  value="' + row.id + '" href="#myModal" class="open-Model" >' + row.subject + '</a>';
+                                    return '<a onclick="OnTicketClick()" data-toggle="modal" data-id="' +
+                                        row.id +
+                                        '" data-subject="' +
+                                        row.subject +
+                                        '" id="edit' +
+                                        row.id +
+                                        '"  value="' +
+                                        row.id +
+                                        '" href="#myModal" class="open-Model" >' +
+                                        row.subject +
+                                        '</a>';
                                 }
                             }
                         ]
@@ -168,5 +238,9 @@
             });
         });
 
+        function OnTicketClick() {
+            $('#assetInfo tbody').empty();
+            $('#txtAssetSearch').val('');
+        }
     </script>
 }
